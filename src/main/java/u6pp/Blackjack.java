@@ -9,14 +9,24 @@ public class Blackjack{
 	int playerHandProgress;
 	int dealerHandProgress;
 	Card[] dealerHand;
-
+	/**
+	 *creates and defines:
+	 *	Scanner
+	 *	new Deck
+	 *	player Hand
+	 *	dealerHand
+	 */
 	public Blackjack() {
 		sc = new Scanner(System.in);
 		D = new Deck();
 		playerHand = new Card[0];
 		dealerHand = new Card[0];
 	}
-	
+	/**
+	 * 
+	 * @param hand - Card array 
+	 * @return int of points in a hand
+	 */
 	public static int calcPoints(Card[] hand) {
 		int count = 0;
 		String test;
@@ -58,10 +68,18 @@ public class Blackjack{
 		}
 		return count;
 	}
+	/**
+	 * 
+	 * @param userHand - player card array
+	 * @param dealerHand - dealer card array
+	 * @return User wins, User Loses, or User Pushes - compares the dealer and players hand to determine who wins
+	 * 
+	 * 
+	 */
 	public static String determineResult(Card[] userHand, Card[] dealerHand) {
 		int userCount = calcPoints(userHand);
 		int compCount = calcPoints(dealerHand);
-		if(userCount > compCount || isBust(dealerHand)) {
+		if(userCount > compCount && (!isBust(userHand))) {
 			return "User Wins";
 		}
 		else if(userCount < compCount || isBust(userHand) || (isBust(userHand) && isBust(dealerHand))){
@@ -73,6 +91,11 @@ public class Blackjack{
 		
 		
 	}
+	/**
+	 * 
+	 * @param hand - a Card array
+	 * @return T/F do the points in the hand go over 21?
+	 */
 	public static boolean isBust(Card[] hand) {
 		int handCount = calcPoints(hand);
 		if(handCount > 21) {
@@ -82,6 +105,11 @@ public class Blackjack{
 			return false;
 		}
 	}
+	/**
+	 * 
+	 * @param hand - a Card array
+	 * @return T/F do the points in the first hand add to 21?
+	 */
 	public static boolean isBlackjack(Card[] hand) {
 		
 		int handCount = calcPoints(hand);
@@ -92,6 +120,11 @@ public class Blackjack{
 			return false;
 		}
 	}
+	/**
+	 * 
+	 * @param hand - dealer Card array
+	 * @return T/F should the dealer hit?(do the points in the dealers hand add to less than 16?)
+	 */
 	public static boolean dealerKeepHitting(Card[] hand) {
 		int handCount = calcPoints(hand);
 		if(handCount <= 16) {
@@ -101,20 +134,12 @@ public class Blackjack{
 			return false;
 		}
 	}
-//	private void playerDeal() {
-//		playerHand[playerHandProgress] = D.deal();
-//		playerHandProgress++;
-//		if(D.progressInDeck > 51) {
-//			D.shuffle();
-//		}
-//	}
-//	private void dealerDeal() {
-//		dealerHand[dealerHandProgress] = D.deal();
-//		dealerHandProgress++;
-//		if(D.progressInDeck > 51) {
-//			D.shuffle();
-//		}
-//	}
+
+	/**
+	 * 
+	 * @param hand - card array
+	 * @return a string that details the cards in a hand
+	 */
 	private String handToString(Card[] hand) {
 		String handString = "";
 		for(int i = 0; i < hand.length; i++) {
@@ -122,6 +147,12 @@ public class Blackjack{
 		}
 		return handString;
 	}
+	
+	/**
+	 * 
+	 * @param prompt - String of a Yes or No question
+	 * @return True = Yes, No = False
+	 */
 	private boolean getYesNoInput(String prompt) {
 		String input;
 		boolean done = false;
@@ -145,7 +176,11 @@ public class Blackjack{
 		}
 		return true;
 	}
-	
+	/**
+	 * 
+	 * @param prompt - Hit or Stay? prompt
+	 * @return - Hit = True, stay = false
+	 */
 	private boolean getHitStayInput(String prompt) {
 		String input;
 		boolean done = false;
@@ -171,20 +206,10 @@ public class Blackjack{
 	}
 	
 	
-//	private void addCard(Card[] hand) {
-//		
-//		Card[] tempArray = new Card[hand.length+1];
-//		Card add = D.deal();
-//		for(int i = 0; i < hand.length; i++) {
-//			tempArray[i] = hand[i];
-//		}
-//		tempArray[tempArray.length - 1] = add;
-//		hand = tempArray;
-//		
-//		if(D.progressInDeck > 51) {
-//			D.shuffle();
-//		}
-//	}
+
+	/**
+	 * adds a new card to the players hand and increases the size of array if necessary 
+	 */
 	private void playerAddCard() {
 		Card[] tempArray = new Card[playerHand.length+1];
 		Card add = D.deal();
@@ -198,6 +223,9 @@ public class Blackjack{
 			D.shuffle();
 		}
 	}
+	/**
+	 * adds a new card to the dealers hand, increases size of array if necessary
+	 */
 	private void dealerAddCard() {
 		Card[] tempArray = new Card[dealerHand.length+1];
 		Card add = D.deal();
@@ -211,6 +239,13 @@ public class Blackjack{
 			D.shuffle();
 		}
 	}
+	/**
+	 * main game play loop of Blackjack
+	 * 1. dealer each in an alternating fashion to the player and dealer
+	 * 2. prompts user to hit or stay until bust or stay
+	 * 3. dealers turn to hit or stay
+	 * 4. prints results
+	 */
 	public void play(){
 		D.shuffle();
 		String name;
